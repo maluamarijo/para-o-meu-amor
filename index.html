@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para o Meu Amor</title>
+    <style>
+        /* Variáveis de Cores e Fontes */
+        :root {
+            --cor-fundo: #0f0c29;
+            --cor-primaria: #ff4b2b;
+            --cor-secundaria: #ff416c;
+            --texto-claro: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            
+            /* IMAGEM DE FUNDO */
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('nossafoto.jpeg');
+            background-size: cover; 
+            background-position: center; 
+            background-attachment: fixed; 
+            
+            color: var(--texto-claro);
+            overflow-x: hidden;
+        }
+
+        /* Container Glassmorphism */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px auto;
+            max-width: 800px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        /* Seção Hero e Efeito de Digitação */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .typing-container {
+            font-size: 2.5rem;
+            font-weight: bold;
+            border-right: 3px solid var(--cor-primaria);
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            animation: typing 3s steps(30, end) forwards, blink 0.75s step-end infinite;
+        }
+
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink { from, to { border-color: transparent } 50% { border-color: var(--cor-primaria); } }
+
+        /* Contador de Tempo */
+        .contador-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .tempo-box {
+            background: linear-gradient(135deg, var(--cor-primaria), var(--cor-secundaria));
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 80px;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.3);
+        }
+
+        .tempo-box span { display: block; font-size: 2rem; font-weight: bold; }
+        .tempo-box p { margin: 0; font-size: 0.9rem; text-transform: uppercase; }
+
+        /* Seção Nossos Números */
+        .numeros-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 65, 108, 0.1);
+            border-color: var(--cor-secundaria);
+        }
+        .stat-card h3 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--cor-secundaria);
+            font-weight: bold;
+        }
+        .stat-card p {
+            margin: 8px 0 0 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Cartas Interativas e Botões */
+        .cartas-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .carta-btn, .btn-interativo {
+            background: var(--glass-bg);
+            border: 1px solid var(--cor-primaria);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .carta-btn:hover, .btn-interativo:hover { 
+            background: var(--cor-primaria); 
+            transform: translateY(-5px); 
+            box-shadow: 0 5px 15px rgba(255, 75, 43, 0.4);
+        }
+
+        /* Modais */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #0f0c29; 
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid var(--cor-primaria);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            max-height: 90vh; 
+            overflow-y: auto; 
+        }
+
+        .modal-img {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid var(--cor-secundaria);
+        }
+
+        .modal-audio {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .fechar {
+            position: absolute;
+            top: 10px; right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--cor-primaria);
+        }
+
+        /* Seção Coisas que eu amo */
+        #caixa-motivo {
+            margin-top: 20px;
+            padding: 20px;
+            min-height: 40px;
+            border-left: 4px solid var(--cor-secundaria);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+
+        /* Seção do Mapa */
+        .mapa-design {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px dashed var(--cor-secundaria);
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 15px;
+        }
+        .coordenadas { 
+            font-family: 'Courier New', Courier, monospace; 
+            color: var(--cor-secundaria); 
+            font-weight: bold; 
+            font-size: 1.3rem; 
+            letter-spacing: 1px;
+            margin: 10px 0;
+        }
+
+        /* Seção do Quiz */
+        .quiz-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .quiz-botoes { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
+        .btn-quiz {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--texto-claro);
+            color: white;
+            padding: 8px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: bold;
+        }
+        .btn-quiz:hover { background: var(--cor-secundaria); border-color: var(--cor-secundaria); }
+        .resposta-quiz { margin-top: 12px; font-weight: bold; color: #ff416c; min-height: 20px; }
+
+        /* Brincadeira Final (Botão Fujão) */
+        .pergunta-container { text-align: center; padding: 50px 0; position: relative; height: 300px;}
+        .btn-acao {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px;
+            font-weight: bold;
+        }
+        
+        #btn-sim { background: var(--cor-primaria); color: white; transition: 0.2s;}
+        #btn-sim:hover { transform: scale(1.1); box-shadow: 0 0 20px var(--cor-primaria);}
+        #btn-nao { 
+            background: #555; 
+            color: white; 
+            position: absolute; 
+        }
+
+        /* Efeito de Corações Caindo */
+        .coracao {
+            position: fixed;
+            top: -20px;
+            font-size: 20px;
+            color: var(--cor-secundaria);
+            user-select: none;
+            pointer-events: none;
+            z-index: 999;
+            animation: cair linear forwards;
+        }
+        @keyframes cair {
+            to {
+                transform: translateY(105vh) rotate(360deg);
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="typing-container">Feliz Dia das Namoradas! ❤️</div>
+        <p style="margin-top: 20px; opacity: 0.8;">Deslize para baixo...</p>
+    </header>
+
+    <section class="glass-panel">
+        <h2 style="text-align: center;">Tempo que dividimos a vida:</h2>
+        <div class="contador-grid">
+            <div class="tempo-box"><span id="dias">0</span><p>Dias</p></div>
+            <div class="tempo-box"><span id="horas">0</span><p>Horas</p></div>
+            <div class="tempo-box"><span id="min">0</span><p>Min</p></div>
+            <div class="tempo-box"><span id="seg">0</span><p>Seg</p></div>
+        </div>
+    </section>
+
+    <section class="glass-panel">
+        <h2 style="text-align: center;">Nossas Estatísticas Oficiais 📊</h2>
+        <p style="text-align: center; opacity: 0.8; margin-bottom: 20px;">Alguns marcos científicos muito importantes da nossa relação:</p>
+        
+        <div class="numeros-grid">
+            <div class="stat-card">
+                <h3>+200</h3>
+                <p>Horas em video chamada</p>
+            </div>
+            <div class="stat-card">
+                <h3>Incalculável</h3>
+                <p>Horas de áudio ouvidas no WhatsApp</p>
+            </div>
+            <div class="stat-card">
+                <h3>20 / 4</h3>
+                <p>Filmes começados vs. Filmes terminados</p>
+            </div>
+            <div class="stat-card">
+                <h3>Infinitos</h3>
+                <p>Planos pro futuro</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="glass-panel" style="text-align: center;">
+        <h2>Razões pelas quais eu te amo...</h2>
+        <p>Clique no botão para descobrir um dos infinitos motivos que me fazem ser boba por você.</p>
+        <button class="btn-interativo" onclick="gerarMotivo()">Gerar um motivo ❤️</button>
+        <div id="caixa-motivo">Clique acima para começar...</div>
+    </section>
+
+    <section class="glass-panel" style="text-align: center;">
+        <h2>O Nosso Lugar no Mundo 📍</h2>
+        <p>O universo inteiro se alinhou para nos guiar exatamente até aqui:</p>
+        <div class="mapa-design">
+            <h3 style="margin-top: 0; color: var(--cor-primaria); font-size: 1.4rem;">Cristo da Barra — Salvador, BA</h3>
+            <div class="coordenadas">13° 00' 14" S, 38° 31' 56" W</div>
+            <p style="font-size: 1rem; opacity: 0.8; margin-bottom: 0; font-style: italic;">"Onde o nosso infinito começou e a história mais linda ganhou vida."</p>
+        </div>
+    </section>
+
+    <section class="glass-panel">
+        <h2 style="text-align: center;">Abra quando precisar...</h2>
+        <div class="cartas-container">
+            <button class="carta-btn" onclick="abrirModal('modal1')">Quando sentir saudade</button>
+            <button class="carta-btn" onclick="abrirModal('modal2')">Quando tiver um dia ruim</button>
+        </div>
+    </section>
+
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <span class="fechar" onclick="fecharModal('modal1')">&times;</span>
+            <h2>Para a Saudade</h2>
+            <img src="IMG_0085.jpeg" alt="Nossa foto especial" class="modal-img">
+            <p>Sempre que a distância apertar, lembre-se que meu coração está aí com você. Dê o play no áudio abaixo e sinta o meu abraço de onde quer que eu esteja.</p>
+            <audio controls class="modal-audio">
+                <source src="As Coisas Tão Mais Lindas.mp3" type="audio/mpeg">
+                Seu navegador não suporta o elemento de áudio.
+            </audio>
+        </div>
+    </div>
+
+    <div id="modal2" class="modal">
+        <div class="modal-content">
+            <span class="fechar" onclick="fecharModal('modal2')">&times;</span>
+            <h2>Para Dias Difíceis</h2>
+            <img src="IMG_8927.jpeg" alt="Foto para animar" class="modal-img">
+            <p>Respire fundo. Você é a pessoa mais forte e incrível que eu conheço. Estou aqui para te apoiar em tudo. Vai ficar tudo bem, escuta só:</p>
+            <audio controls class="modal-audio">
+                <source src="Djavan - Meu (Áudio Oficial).mp3" type="audio/mpeg">
+                Seu navegador não suporta o elemento de áudio.
+            </audio>
+        </div>
+    </div>
+
+    <section class="glass-panel">
+        <h2 style="text-align: center;">Jogo: Quem é mais provável? 🤭</h2>
+        <p style="text-align: center; opacity: 0.8;">Clique em quem você acha que mais combina com a frase e veja a verdade!</p>
+        
+        <div class="quiz-item">
+            <p style="margin: 0; font-weight: bold; text-align: center; font-size: 1.1rem;">1. Quem é mais provável de chorar assistindo filme?</p>
+            <div class="quiz-botoes">
+                <button class="btn-quiz" onclick="responderQuiz(1, 'Você com certeza! Chora até com desenho animado.')">Raquel</button>
+                <button class="btn-quiz" onclick="responderQuiz(1, 'Eu até me arrepio, mas você é bem mais manteiga derretida!kkkkkkkkkk')">Malu</button>
+            </div>
+            <div id="res-1" class="resposta-quiz" style="text-align: center;"></div>
+        </div>
+
+        <div class="quiz-item">
+            <p style="margin: 0; font-weight: bold; text-align: center; font-size: 1.1rem;">2. Quem é mais provável de dormir no meio do filme?</p>
+            <div class="quiz-botoes">
+                <button class="btn-quiz" onclick="responderQuiz(2, 'Você até dá uma cochilada às vezes, mas quem dorme pesado mesmo sou eu!')">Raquel</button>
+                <button class="btn-quiz" onclick="responderQuiz(2, 'Acertou em cheio! Não dá 15 minutos de filme e eu já tô roncando de ladinho. 😴')">Malu</button>
+            </div>
+            <div id="res-2" class="resposta-quiz" style="text-align: center;"></div>
+        </div>
+
+        <div class="quiz-item">
+            <p style="margin: 0; font-weight: bold; text-align: center; font-size: 1.1rem;">3. Quem gasta mais?</p>
+            <div class="quiz-botoes">
+                <button class="btn-quiz" onclick="responderQuiz(3, 'Com certeza! Um docinho, uma roupinha nova ou uma saidinha sempre ganham seu coração .')">Raquel</button>
+                <button class="btn-quiz" onclick="responderQuiz(3, 'Eu até tento fingir que economizo, mas a verdade é que não tenho dinheiro mesmo. kkkkkkk')">Malu</button>
+            </div>
+            <div id="res-3" class="resposta-quiz" style="text-align: center;"></div>
+        </div>
+    </section>
+
+    <section class="glass-panel pergunta-container">
+        <h2>Você me ama?</h2>
+        <div style="position: relative; display: flex; justify-content: center; gap: 20px; margin-top: 30px;">
+            <button id="btn-sim" class="btn-acao" onclick="aceitouAmor()">SIM!</button>
+            <button id="btn-nao" class="btn-acao">NÃO</button>
+        </div>
+    </section>
+
+    <script>
+        // 1. CONFIGURAÇÃO DO CONTADOR
+        const dataInicio = new Date(2026, 2, 14); 
+
+        function atualizarContador() {
+            const agora = new Date();
+            const diferenca = agora - dataInicio;
+
+            const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((diferenca / (1000 * 60 * 60)) % 24);
+            const minutos = Math.floor((diferenca / 1000 / 60) % 60);
+            const segundos = Math.floor((diferenca / 1000) % 60);
+
+            document.getElementById('dias').innerText = dias;
+            document.getElementById('horas').innerText = horas;
+            document.getElementById('min').innerText = minutos;
+            document.getElementById('seg').innerText = segundos;
+        }
+        setInterval(atualizarContador, 1000);
+        atualizarContador();
+
+        // 2. CONTROLE DOS MODAIS (Cartas)
+        function abrirModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+        
+        function fecharModal(id) {
+            document.getElementById(id).style.display = 'none';
+            const audio = document.querySelector(`#${id} audio`);
+            if (audio) {
+                audio.pause();
+            }
+        }
+
+        // 3. LISTA DE MOTIVOS (COISAS QUE EU AMO EM VOCÊ)
+        const motivos = [
+            "Amo o som da sua risada quando você está genuinamente feliz.",
+            "Amo o jeito único que você me olha.",
+            "Amo o formato do seu sorriso e como ele clareia qualquer dia ruim.",
+            "Amo o cafuné e o carinho que você me faz quando estamos deitadas juntas.",
+            "Amo a sua força, a sua determinação e a mulher incrível que você demonstra ser todos os dias.",
+            "Amo a paz e a segurança indescritível que o seu abraço me traz.",
+            "Amo cada pedacinho bobo em você, até as manias mais engraçadas.",
+            "Amo a forma em que você come seu miojo.",
+            "Amo seu sinalzinho da boca.",
+            "Amo estar com você.",
+            "Amo a ansiedade que eu sinto antes de te ver.",
+            "Amo o seu beijo",
+            "Amo o seu cheiro",
+            "Amo seu cachinhos",
+            "Amo quando você fala de coisas que eu não entendo."
+        ];
+
+        function gerarMotivo() {
+            const caixa = document.getElementById('caixa-motivo');
+            const motivoAleatorio = motivos[Math.floor(Math.random() * motivos.length)];
+            caixa.innerText = motivoAleatorio;
+        }
+
+        // 4. LÓGICA DO QUIZ
+        function responderQuiz(idPergunta, textoResposta) {
+            document.getElementById(`res-${idPergunta}`).innerText = textoResposta;
+        }
+
+        // 5. LÓGICA DO BOTÃO FUJÃO
+        const btnNao = document.getElementById('btn-nao');
+        
+        btnNao.addEventListener('mouseover', () => {
+            const x = Math.floor(Math.random() * (window.innerWidth - 150));
+            const y = Math.floor(Math.random() * 200) - 100;
+            
+            btnNao.style.position = 'absolute';
+            btnNao.style.left = `${x}px`;
+            btnNao.style.transform = `translateY(${y}px)`;
+        }); 
+
+        // 6. CHUVA DE CORAÇÕES
+        function criarCoracao() {
+            const coracao = document.createElement('div');
+            coracao.classList.add('coracao');
+            coracao.innerText = '❤️';
+            coracao.style.left = Math.random() * 100 + 'vw';
+            
+            coracao.style.animationDuration = (Math.random() * 2 + 3) + 's'; 
+            coracao.style.opacity = Math.random() * 0.5 + 0.5;
+            coracao.style.fontSize = Math.random() * 15 + 15 + 'px';
+            
+            document.body.appendChild(coracao);
+            
+            setTimeout(() => {
+                coracao.remove();
+            }, 5000);
+        }
+        
+        setInterval(criarCoracao, 400);
+
+        function aceitouAmor() {
+            alert('Eu te amo mais! ❤️');
+            for(let i = 0; i < 60; i++) {
+                setTimeout(criarCoracao, i * 40);
+            }
+        }
+    </script>
+</body>
+</html>
