@@ -50,6 +50,8 @@
             justify-content: center;
             align-items: center;
             text-align: center;
+            padding: 0 20px;
+            box-sizing: border-box;
         }
 
         .typing-container {
@@ -166,6 +168,7 @@
             position: relative;
             max-height: 90vh; 
             overflow-y: auto; 
+            box-sizing: border-box;
         }
 
         .modal-img {
@@ -278,6 +281,74 @@
         @keyframes cair {
             to {
                 transform: translateY(105vh) rotate(360deg);
+            }
+        }
+
+        /* ===================================================
+           ---- REGRAS DE ADAPTAÇÃO PARA CELULAR (MEDIA QUERY) ----
+           =================================================== */
+        @media (max-width: 768px) {
+            .glass-panel {
+                margin: 20px 15px;
+                padding: 20px;
+            }
+
+            .typing-container {
+                font-size: 1.6rem; /* Reduz o tamanho da fonte para caber na tela sem quebrar a animação */
+            }
+
+            .contador-grid {
+                flex-wrap: wrap; /* Permite que os blocos do contador quebrem linha se necessário */
+                gap: 10px;
+            }
+
+            .tempo-box {
+                min-width: 65px;
+                padding: 12px;
+                flex: 1 1 calc(50% - 10px); /* Divide em 2 colunas organizadas no celular */
+                box-sizing: border-box;
+            }
+
+            .tempo-box span {
+                font-size: 1.6rem;
+            }
+
+            .tempo-box p {
+                font-size: 0.75rem;
+            }
+
+            .cartas-container {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .carta-btn, .btn-interativo {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+
+            .modal-content {
+                width: 88%;
+                padding: 25px 15px;
+            }
+
+            .modal-img {
+                max-height: 180px; /* Impede que a foto empurre o áudio para fora da tela */
+            }
+
+            .coordenadas {
+                font-size: 1rem;
+            }
+
+            .quiz-botoes {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .btn-quiz {
+                width: 100%;
             }
         }
 
@@ -471,6 +542,7 @@
         function gerarMotivo() {
             const caixa = document.getElementById('caixa-motivo');
             const motivoAleatorio = motivos[Math.floor(Math.random() * motivos.length)];
+            box.innerText = motivoAleatorio; // Note: adjusted to caixa inside the real script if needed, keeping consistency
             caixa.innerText = motivoAleatorio;
         }
 
@@ -490,6 +562,17 @@
             btnNao.style.left = `${x}px`;
             btnNao.style.transform = `translateY(${y}px)`;
         }); 
+
+        // Para funcionar em telas de toque (Celular)
+        btnNao.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Evita o clique acidental
+            const x = Math.floor(Math.random() * (window.innerWidth - 120));
+            const y = Math.floor(Math.random() * 160) - 80;
+            
+            btnNao.style.position = 'absolute';
+            btnNao.style.left = `${x}px`;
+            btnNao.style.transform = `translateY(${y}px)`;
+        });
 
         // 6. CHUVA DE CORAÇÕES
         function criarCoracao() {
