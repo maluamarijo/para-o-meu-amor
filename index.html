@@ -197,7 +197,7 @@
         #caixa-motivo {
             margin-top: 20px;
             padding: 20px;
-            min-height: 40px;
+            min-height: 45px;
             border-left: 4px solid var(--cor-secundaria);
             background: rgba(255, 255, 255, 0.05);
             border-radius: 4px;
@@ -284,9 +284,7 @@
             }
         }
 
-        /* ===================================================
-           ---- REGRAS DE ADAPTAÇÃO PARA CELULAR (MEDIA QUERY) ----
-           =================================================== */
+        /* ---- REGRAS DE ADAPTAÇÃO PARA CELULAR ---- */
         @media (max-width: 768px) {
             .glass-panel {
                 margin: 20px 15px;
@@ -294,18 +292,18 @@
             }
 
             .typing-container {
-                font-size: 1.6rem; /* Reduz o tamanho da fonte para caber na tela sem quebrar a animação */
+                font-size: 1.6rem;
             }
 
             .contador-grid {
-                flex-wrap: wrap; /* Permite que os blocos do contador quebrem linha se necessário */
+                flex-wrap: wrap;
                 gap: 10px;
             }
 
             .tempo-box {
                 min-width: 65px;
                 padding: 12px;
-                flex: 1 1 calc(50% - 10px); /* Divide em 2 colunas organizadas no celular */
+                flex: 1 1 calc(50% - 10px);
                 box-sizing: border-box;
             }
 
@@ -335,7 +333,7 @@
             }
 
             .modal-img {
-                max-height: 180px; /* Impede que a foto empurre o áudio para fora da tela */
+                max-height: 180px;
             }
 
             .coordenadas {
@@ -542,7 +540,6 @@
         function gerarMotivo() {
             const caixa = document.getElementById('caixa-motivo');
             const motivoAleatorio = motivos[Math.floor(Math.random() * motivos.length)];
-            box.innerText = motivoAleatorio; // Note: adjusted to caixa inside the real script if needed, keeping consistency
             caixa.innerText = motivoAleatorio;
         }
 
@@ -565,7 +562,7 @@
 
         // Para funcionar em telas de toque (Celular)
         btnNao.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Evita o clique acidental
+            e.preventDefault();
             const x = Math.floor(Math.random() * (window.innerWidth - 120));
             const y = Math.floor(Math.random() * 160) - 80;
             
@@ -576,19 +573,19 @@
 
         // 6. CHUVA DE CORAÇÕES
         function criarCoracao() {
-            const coracao = document.createElement('div');
-            coracao.classList.add('coracao');
-            coracao.innerText = '❤️';
-            coracao.style.left = Math.random() * 100 + 'vw';
+            const staticCoracao = document.createElement('div');
+            staticCoracao.classList.add('coracao');
+            staticCoracao.innerText = '❤️';
+            staticCoracao.style.left = Math.random() * 100 + 'vw';
             
-            coracao.style.animationDuration = (Math.random() * 2 + 3) + 's'; 
-            coracao.style.opacity = Math.random() * 0.5 + 0.5;
-            coracao.style.fontSize = Math.random() * 15 + 15 + 'px';
+            staticCoracao.style.animationDuration = (Math.random() * 2 + 3) + 's'; 
+            staticCoracao.style.opacity = Math.random() * 0.5 + 0.5;
+            staticCoracao.style.fontSize = Math.random() * 15 + 15 + 'px';
             
-            document.body.appendChild(coracao);
+            document.body.appendChild(staticCoracao);
             
             setTimeout(() => {
-                coracao.remove();
+                staticCoracao.remove();
             }, 5000);
         }
         
